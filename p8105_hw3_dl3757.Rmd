@@ -109,3 +109,36 @@ plot_2 <- ny_noaa_tidy %>%
 # Combine two plots into one two-panel plot
 plot_1 / plot_2
 ```
+
+# Problem 2
+## (a)
+```{r message = FALSE}
+# Load and clean the dataset
+demographic_data <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/",
+  "refs/heads/main/nhanes_covar.csv"), 
+  skip = 4, 
+  na = c("NA", ".", "")) %>% 
+  janitor::clean_names()
+
+accelerometer_data <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/",
+  "refs/heads/main/nhanes_accel.csv"), 
+  na = c("NA", ".", "")) %>% 
+  janitor::clean_names()
+
+# Merge two different datasets
+merged_data <- left_join(demographic_data, accelerometer_data, 
+                         by = "seqn")
+
+# Clean the merged dataset
+tidy_data <- merged_data %>% 
+  filter(age >= 21) %>%
+  drop_na(sex, age, bmi, education) %>% 
+  mutate(sex = factor(sex, levels = c(1, 2), 
+                      labels = c("male", "female"))) %>% 
+  mutate(education = factor(education, levels = c(1, 2, 3), 
+                            labels = c("less than high school", 
+                                       "high school equivalent", 
+                                       "more than high school")))
+```
