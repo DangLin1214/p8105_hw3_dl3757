@@ -46,3 +46,29 @@ knitr::kable(most_commonly_snowfall_values,
 ```
 
 The most common snowfall values are 0mm, 25mm, 13mm, 51mm, and 76mm. This is likely because the dataset only includes snowfall measurements from New York State, rather than from the entire nation.
+
+## (b)
+```{r message = FALSE, warning = FALSE}
+# Create the average max temperature data frame 
+average_tmax_df <- ny_noaa_tidy %>% 
+  filter(month == 1 | month == 7) %>% 
+  group_by(id, year, month) %>% 
+  summarise(average_tmax = mean(tmax, na.rm = TRUE)) %>% 
+  arrange(id, year, month)
+
+# Make a two-panel plot showing the average max temperature in January and in July 
+# in each station across years
+average_tmax_df %>%
+  ggplot(aes(x = year, y = average_tmax)) +
+  geom_line(aes(color = id)) +
+  facet_wrap(~ month, scales = "free_y", 
+             labeller = labeller(month = c('1' = "January", '7' = "July")), 
+             ncol = 1) + 
+  labs(title = "Average Max Temperature in January and July", 
+       x = "Year", 
+       y = "Average Max Temperature (degree Celsius)") +
+  theme_minimal() + 
+  theme(legend.position = "none")
+```
+
+From the plot, we can observe that the average maximum temperatures in both January and July fluctuate over the years, but there is no clear pattern. Additionally, it is worth mentioning an outlier in July 1988, which might have been caused by extreme weather conditions in that month or errors in the data collection process.
