@@ -315,3 +315,26 @@ median_ride_duration %>%
 ```
 
 From the bar plot above, we can observe that people tend to ride more in July than in January, regardless of whether it’s 2020 or 2024. Besides, compared to 2020, riders in 2024 have shorter ride duration in both January and July. Furthermore, it is worth mentioning that people tend to ride more on weekends than on weekdays, likely because they have more spare time.
+
+## (e)
+```{r message = FALSE}
+# Clean the dataset
+citi_bike_2024 <- tidy_dataset %>% 
+  filter(year == "2024")
+
+# Make a plot for the impact of month, membership status, and bike type on ride duration
+citi_bike_2024 %>%
+  ggplot(aes(x = month, y = duration, fill = member_casual)) + 
+  geom_boxplot() + 
+  labs(title = "Impact of Month, Membership Status, and Bike Type on Ride Duration",
+       x = "Month", 
+       y = "Ride Duration In Minutes", 
+       fill = "Membership Status") + 
+  facet_wrap(~ rideable_type, 
+             labeller = as_labeller(c('classic_bike' = 'Classic Bike', 
+                                      'electric_bike' = 'Electric Bike'))) + 
+  scale_fill_manual(values = c("casual" = "lightblue", "member" = "pink")) +
+  theme_minimal()
+```
+
+From the boxplots above, we can observe that the median ride duration for casual riders is higher than that of member riders in both January and July, regardless of whether it’s 2020 or 2024, suggesting that casual riders tend to have longer ride duration. Besides, there is only a minor difference in ride duration between classic bikes and electric bikes. Additionally, it is worth mentioning the presence of numerous outliers in the boxplots, indicating that some riders enjoy longer rides and tend to have extended ride duration.
