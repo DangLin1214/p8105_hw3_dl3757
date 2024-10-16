@@ -71,4 +71,41 @@ average_tmax_df %>%
   theme(legend.position = "none")
 ```
 
-From the plot, we can observe that the average maximum temperatures in both January and July fluctuate over the years, but there is no clear pattern. Additionally, it is worth mentioning an outlier in July 1988, which might have been caused by extreme weather conditions in that month or errors in the data collection process.
+From the plot, we can observe that the average maximum temperatures in both January and July fluctuate over the years, but there is no clear pattern. Additionally, it is worth mentioning an outlier in July 1988, which might have been caused by extreme weather conditions in that month or errors in the data collection process. 
+
+## (c)
+```{r message = FALSE}
+# Plot the density plot of maximum and minimum temperatures
+plot_1 <- ny_noaa_tidy %>% 
+  filter(!is.na(tmax) & !is.na(tmin)) %>% 
+  select(id, tmax, tmin) %>% 
+  pivot_longer( 
+    tmax:tmin, 
+    names_to = "observation", 
+    values_to = "temp") %>% 
+  ggplot(aes(x = temp, fill = observation)) + 
+  geom_density(alpha = 0.5) + 
+  viridis::scale_fill_viridis(discrete = TRUE) +  
+  theme_minimal() + 
+  labs(title = "Density Plot of Maximum and Minimum Temperatures", 
+       x = "Temperature (degree Celsius)", 
+       y = "Density")
+
+# Plot the boxplot of distribution of snowfall values by year
+plot_2 <- ny_noaa_tidy %>% 
+  filter(snow > 0 & snow < 100) %>% 
+  ggplot(aes(x = as.factor(year), y = snow, fill = as.factor(year))) + 
+  geom_boxplot() + 
+  labs(title = "Distribution of Snowfall Values by Year", 
+       x = "Year", 
+       y = "Snowfall Value", 
+       fill = "Year") + 
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.8), 
+        legend.text = element_text(size = 6), 
+        legend.key.size = unit(0.4, "cm"), 
+        legend.title = element_text(size = 8))
+
+# Combine two plots into one two-panel plot
+plot_1 / plot_2
+```
