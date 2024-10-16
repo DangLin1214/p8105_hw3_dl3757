@@ -290,3 +290,28 @@ popular_starting_stations <- tidy_dataset %>%
 knitr::kable(popular_starting_stations, 
              caption = "The 5 Most Popular Starting Stations For July 2024")
 ```
+
+## (d)
+```{r message = FALSE}
+# Clean the dataset and calculate the median ride duration
+median_ride_duration <- tidy_dataset %>% 
+  group_by(year, month, weekdays) %>% 
+  summarise(median_ride_duration = median(duration, na.rm = TRUE)) %>% 
+  mutate(weekdays = factor(weekdays, levels = c("Monday", "Tuesday", "Wednesday", 
+                                                "Thursday", "Friday", "Saturday", 
+                                                "Sunday")))
+
+# Make a plot for effects of day of the week, month, and year on median ride duration
+median_ride_duration %>%
+  ggplot(aes(x = weekdays, y = median_ride_duration, fill = month)) + 
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.6) + 
+  labs(title = "Effects of Day of the Week, Month, and Year on Median Ride Duration",
+       x = "Day of the Week", 
+       y = "Median Ride Duration In Minutes", 
+       fill = "Month of the Year") + 
+  facet_wrap(~ year) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.8, size = 8))
+```
+
+From the bar plot above, we can observe that people tend to ride more in July than in January, regardless of whether it’s 2020 or 2024. Besides, compared to 2020, riders in 2024 have shorter ride duration in both January and July. Furthermore, it is worth mentioning that people tend to ride more on weekends than on weekdays, likely because they have more spare time.
