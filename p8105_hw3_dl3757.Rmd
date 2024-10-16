@@ -13,4 +13,36 @@ library(patchwork)
 library(p8105.datasets)
 ```
 
+# Problem 1
+## (a)
+```{r message = FALSE}
+# Load the data and convert data to the data frame
+data("ny_noaa")
+ny_noaa <- as.data.frame(ny_noaa)
 
+# Clean the dataset 
+ny_noaa_tidy <- ny_noaa %>%
+  mutate(
+    date = as.Date(date, format = "%Y-%m-%d"),
+    year = year(date),
+    month = month(date),
+    day = day(date), 
+    prcp = as.numeric(prcp) / 10, 
+    tmax = as.numeric(tmax) / 10, 
+    tmin = as.numeric(tmin) / 10)
+
+# Find the most commonly snowfall values
+most_commonly_snowfall_values <- ny_noaa_tidy %>% 
+  filter(!is.na(snow)) %>% 
+  group_by(snow) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count)) %>% 
+  head(n = 5) %>% 
+  rename("Snowfall Values" = snow, 
+         "Count" = count)
+
+knitr::kable(most_commonly_snowfall_values, 
+             caption = "The Most Commonly Snowfall Values (mm)")
+```
+
+The most common snowfall values are 0mm, 25mm, 13mm, 51mm, and 76mm. This is likely because the dataset only includes snowfall measurements from New York State, rather than from the entire nation.
