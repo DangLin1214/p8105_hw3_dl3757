@@ -208,4 +208,51 @@ tidy_longer_data %>%
   theme_minimal()
 ```
 
-The first plot is based on the median minute values, while the second plot is based on individual minute values. In both plots, we observe that both male and female participants are more active during the afternoon, with less activity in the morning and evening. Additionally, the first plot shows that female participants tend to have more activity than male participants. More importantly, we see that the daily activity pattern is not significantly affected by the participants' education level; only minor differences are observed across the different education categories.
+The first plot is based on the median minute values, while the second plot is based on individual minute values. In both plots, we observe that both male and female participants are more active during the afternoon, with less activity in the morning and evening. Additionally, the first plot shows that female participants tend to have more activity than male participants. More importantly, we see that the daily activity pattern is not significantly affected by the participants' education level; only minor differences are observed across the different education categories. 
+
+# Problem 3
+## (a)
+```{r message = FALSE}
+# Load and clean the dataset
+jan_2020 <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/", 
+  "refs/heads/main/citibike/Jan%202020%20Citi.csv"), 
+                     na = c("NA", ".", "")) %>% 
+  janitor::clean_names() %>% 
+  mutate(month= "January", 
+         year = "2020")
+
+jan_2024 <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/", 
+  "refs/heads/main/citibike/Jan%202024%20Citi.csv"), 
+                     na = c("NA", ".", "")) %>% 
+  janitor::clean_names() %>% 
+  mutate(month= "January", 
+         year = "2024")
+
+july_2020 <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/",
+  "refs/heads/main/citibike/July%202020%20Citi.csv"), 
+                     na = c("NA", ".", "")) %>% 
+  janitor::clean_names() %>% 
+  mutate(month= "July", 
+         year = "2020")
+
+july_2024 <- read_csv(paste0(
+  "https://raw.githubusercontent.com/DangLin1214/p8105_hw3_dl3757/",
+  "refs/heads/main/citibike/July%202024%20Citi.csv"), 
+                     na = c("NA", ".", "")) %>% 
+  janitor::clean_names() %>% 
+  mutate(month= "July", 
+         year = "2024")
+
+# Merge different datasets
+tidy_dataset <- 
+  bind_rows(jan_2020, jan_2024, july_2020, july_2024) %>% 
+  mutate(duration = as.numeric(duration), 
+         year = as.character(year), 
+         month = as.character(month)) %>%
+  select(year, month, everything())
+```
+
+After the data cleaning and merging steps, the resulting dataset contains 99,485 observations and 9 variables. We created new variables, "year" and "month," and converted them to the character type. Other important variables in the dataset include "ride_id," "rideable_type," "duration," "member_casual," etc.
