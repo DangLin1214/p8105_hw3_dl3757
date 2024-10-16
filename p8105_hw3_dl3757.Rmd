@@ -142,3 +142,30 @@ tidy_data <- merged_data %>%
                                        "high school equivalent", 
                                        "more than high school")))
 ```
+
+## (b)
+```{r message = FALSE}
+# Produce a table for the number of men and women in each education category
+sex_education <- tidy_data %>% 
+  group_by(sex, education) %>% 
+  summarize(count= n()) %>% 
+  pivot_wider(names_from = sex, 
+              values_from = count) %>% 
+  rename("Education Level" = education, 
+         "Male" = male, "Female" = female)
+
+knitr::kable(sex_education, 
+             caption = "Sex and Education Category Table")
+```
+
+```{r message = FALSE}
+# Create a boxplot of age distributions in each education category by sex
+ggplot(tidy_data, aes(x = education, y = age, fill = sex)) +
+  geom_boxplot() +
+  labs(title = "Age Distributions in Each Education Category by Sex",
+       x = "Education", y = "Age", fill = "Sex") +
+  scale_fill_manual(values = c("male" = "lightblue", "female" = "pink")) +
+  theme_minimal()
+```
+
+From the table, we can find that the distribution of education levels is quite similar between male and female participants. Additionally, the study included more participants with an education level higher than high school. From the boxplot, we observe that the median age for the "less than high school" group is around 60 years old, while the median age for the "more than high school" group is approximately 42 years old. This suggests that participants tend to be older as education levels decrease, likely reflecting differences in education attainment across generations. Furthermore, it is worth mentioning that the median age of female participants in the "high school equivalent" group is about five years higher than that of male participants in the same group.
