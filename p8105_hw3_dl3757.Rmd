@@ -1,0 +1,16 @@
+---
+title: "p8015_hw3_dl3757"
+author: "Dang Lin dl3757"
+date: "2024-10-16"
+output: github_document
+---
+
+```{r message = FALSE}
+# Import the libraries
+library(tidyverse)
+library(knitr)
+library(patchwork)
+library(p8105.datasets)
+```
+
+
