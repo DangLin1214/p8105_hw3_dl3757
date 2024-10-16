@@ -256,3 +256,21 @@ tidy_dataset <-
 ```
 
 After the data cleaning and merging steps, the resulting dataset contains 99,485 observations and 9 variables. We created new variables, "year" and "month," and converted them to the character type. Other important variables in the dataset include "ride_id," "rideable_type," "duration," "member_casual," etc.
+
+## (b)
+```{r message = FALSE}
+# Produce a table for the total number of rides by year and month
+total_number_of_rides <- tidy_dataset %>% 
+  group_by(year, month, member_casual) %>% 
+  summarize(count= n()) %>% 
+  pivot_wider(names_from = member_casual, 
+              values_from = count) %>% 
+  rename("Casual Riders" = casual, 
+         "Member Riders" = member)
+
+knitr::kable(total_number_of_rides, 
+             caption = "Total Number of Rides by Year and Month, 
+             Separated by Casual Riders and Citi Bike Members")
+```
+
+From the table, we can observe that more people joined the rides from 2020 to 2024. In addition, both the number of members and casual riders increased significantly, but the number of members is still much higher than that of casual riders. Furthermore, more people tend to ride in July than in January, regardless of whether it’s 2020 or 2024, likely due to better weather conditions in July.
