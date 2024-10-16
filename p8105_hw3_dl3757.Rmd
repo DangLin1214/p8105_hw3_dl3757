@@ -158,6 +158,7 @@ knitr::kable(sex_education,
              caption = "Sex and Education Category Table")
 ```
 
+## (c)
 ```{r message = FALSE}
 # Create a boxplot of age distributions in each education category by sex
 ggplot(tidy_data, aes(x = education, y = age, fill = sex)) +
