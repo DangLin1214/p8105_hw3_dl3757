@@ -169,3 +169,43 @@ ggplot(tidy_data, aes(x = education, y = age, fill = sex)) +
 ```
 
 From the table, we can find that the distribution of education levels is quite similar between male and female participants. Additionally, the study included more participants with an education level higher than high school. From the boxplot, we observe that the median age for the "less than high school" group is around 60 years old, while the median age for the "more than high school" group is approximately 42 years old. This suggests that participants tend to be older as education levels decrease, likely reflecting differences in education attainment across generations. Furthermore, it is worth mentioning that the median age of female participants in the "high school equivalent" group is about five years higher than that of male participants in the same group.
+
+## (d)
+```{r message = FALSE}
+# Clean the data
+tidy_longer_data <- tidy_data %>% 
+  pivot_longer(
+    min1:min1440, 
+    names_to = "minute", 
+    values_to = "minutes_value", 
+    names_prefix = "min") %>% 
+  group_by(minute, sex, education) %>%
+  mutate(minute = as.numeric(minute)) 
+
+# Create the plot for 24-hour activity time courses for each education level 
+# by sex based on the mean minutes value
+tidy_longer_data %>% 
+  summarise(mean_min_value = mean(minutes_value)) %>% 
+  ggplot(aes(x = minute, y = mean_min_value, color = sex)) + 
+  geom_point(alpha = 0.1) + 
+  geom_smooth(se = FALSE) + 
+  labs(title = "24-hour Activity Time Courses for Each Education Level By Sex",
+       x = "Time In Minutes", y = "Mean Activity Value", color = "Sex") + 
+  facet_wrap(~ education) + 
+  theme_minimal()
+```
+
+```{r message = FALSE}
+# Create the plot for 24-hour activity time courses for each education level 
+# by sex based on minutes value
+tidy_longer_data %>% 
+  ggplot(aes(x = minute, y = minutes_value, color = sex)) + 
+  geom_point(alpha = 0.1) + 
+  geom_smooth(se = FALSE) + 
+  labs(title = "24-hour Activity Time Courses for Each Education Level By Sex",
+       x = "Time In Minutes", y = "Activity Value", color = "Sex") + 
+  facet_wrap(~ education) + 
+  theme_minimal()
+```
+
+The first plot is based on the median minute values, while the second plot is based on individual minute values. In both plots, we observe that both male and female participants are more active during the afternoon, with less activity in the morning and evening. Additionally, the first plot shows that female participants tend to have more activity than male participants. More importantly, we see that the daily activity pattern is not significantly affected by the participants' education level; only minor differences are observed across the different education categories.
